@@ -1472,7 +1472,7 @@ MonoBehaviour:
   snapSound: {fileID: 8300000, guid: 0e4bcce5b5a984ceaa4084c125de6fcf, type: 3}
   launchPoint: {fileID: 0}
   launchPos: {x: 0, y: 0, z: 0}
-  projectile: {fileID: 0}
+  projectile: {fileID: 722068902260191328, guid: 6e2327e7cea5d48a4b8686496ccbe164, type: 3}
   aimingMode: 0
 --- !u!82 &1268813564
 AudioSource:
