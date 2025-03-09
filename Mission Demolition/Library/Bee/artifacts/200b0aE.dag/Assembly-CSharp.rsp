@@ -389,7 +389,6 @@
 "Assets/TextMesh Pro/Examples & Extras/Scripts/VertexShakeB.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/VertexZoom.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/WarpTextExample.cs"
-"Assets/WelcomeScreen.cs"
 "Assets/_Scripts/CloudCover.cs"
 "Assets/_Scripts/FollowCam.cs"
 "Assets/_Scripts/Goal.cs"
@@ -398,6 +397,7 @@
 "Assets/_Scripts/ProjectileLine.cs"
 "Assets/_Scripts/RigidbodySleep.cs"
 "Assets/_Scripts/Slingshot.cs"
+"Assets/_Scripts/WelcomeScreen.cs"
 -langversion:9.0
 /deterministic
 /optimize+
