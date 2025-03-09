@@ -8,14 +8,43 @@ public class Slingshot : MonoBehaviour
     public GameObject projectilePrefab;
     public float velocityMult = 10f;
     public GameObject projLinePrefab;
+    public Transform leftAnchor; 
+    public Transform rightAnchor;
+    public LineRenderer lineRenderer;
+    public AudioClip snapSound; 
 
     [Header("Dynamic")]
+    private AudioSource audioSource; 
     public GameObject launchPoint;
     public Vector3 launchPos;
     public GameObject projectile;
     public bool aimingMode;
 
-        void Update()
+    void Awake()
+    {
+        Transform launchPointTrans = transform.Find("LaunchPoint");
+        launchPoint = launchPointTrans.gameObject;
+        launchPoint.SetActive(false);
+        launchPos = launchPointTrans.position;
+
+        lineRenderer = GetComponent<LineRenderer>();
+        if (lineRenderer == null)
+        {
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+        }
+        lineRenderer.positionCount = 3;
+        lineRenderer.startWidth = 0.05f;
+        lineRenderer.endWidth = 0.05f;
+        lineRenderer.enabled = false;
+
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+    }
+
+    void Update()
     {
         if (!aimingMode) return;
 
@@ -34,6 +63,8 @@ public class Slingshot : MonoBehaviour
         Vector3 projPos = launchPos + mouseDelta;
         projectile.transform.position = projPos;
 
+        DrawRubberBand(projPos);
+
         if (Input.GetMouseButtonUp(0))
         {
             aimingMode = false;
@@ -46,33 +77,44 @@ public class Slingshot : MonoBehaviour
             Instantiate(projLinePrefab, projectile.transform);
             projectile = null;
             MissionDemolition.SHOT_FIRED();
+
+            if (snapSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(snapSound);
+            }
+
+            lineRenderer.enabled = false;
         }
     }
 
-    void Awake()
-    {
-        Transform launchPointTrans = transform.Find("LaunchPoint");
-        launchPoint = launchPointTrans.gameObject;
-        launchPoint.SetActive(false);
-        launchPos = launchPointTrans.position;
-
-    }
     void OnMouseEnter()
     {
-        print("Slingshot:OnMouseEnter()");
         launchPoint.SetActive(true);
     }
-    void OnMouseExit() 
+
+    void OnMouseExit()
     {
-        print("Slingshot:OnMouseExit()");
         launchPoint.SetActive(false);
     }
+
     void OnMouseDown()
     {
         aimingMode = true;
-        projectile = Instantiate(projectilePrefab) as GameObject;
+        projectile = Instantiate(projectilePrefab);
         projectile.transform.position = launchPos;
         projectile.GetComponent<Rigidbody>().isKinematic = true;
-    } 
-     
+
+        lineRenderer.enabled = true;
+        DrawRubberBand(launchPos);
+    }
+
+    void DrawRubberBand(Vector3 projPos)
+    {
+        if (lineRenderer != null && leftAnchor != null && rightAnchor != null)
+        {
+            lineRenderer.SetPosition(0, leftAnchor.position);
+            lineRenderer.SetPosition(1, projPos);
+            lineRenderer.SetPosition(2, rightAnchor.position);
+        }
+    }
 }

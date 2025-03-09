@@ -16,12 +16,12 @@ public class MissionDemolition : MonoBehaviour
     static private MissionDemolition S;
 
     [Header("Inscribed")]
-   // public TK.TextMeshProUGUI
     public TMP_Text uitLevel;
     public TMP_Text uitShots;
     public Vector3 castlePos;
     public GameObject[] castles;
-    
+    public GameObject gameOverPanel; 
+    public Button playAgainButton; 
     [Header("Dynamic")]
     public int level;
     public int levelMax;
@@ -30,7 +30,6 @@ public class MissionDemolition : MonoBehaviour
     public GameMode mode = GameMode.idle;
     public string showing = "Show Slingshot";
 
-    // Start is called before the first frame update
     void Start()
     {
         S = this;
@@ -38,7 +37,11 @@ public class MissionDemolition : MonoBehaviour
         level = 0;
         shotsTaken = 0;
         levelMax = castles.Length;
+        gameOverPanel.SetActive(false); 
+        
         StartLevel();
+
+        playAgainButton.onClick.AddListener(RestartGame);
     }
 
     void StartLevel()
@@ -68,7 +71,6 @@ public class MissionDemolition : MonoBehaviour
         uitShots.text = "Shots Taken: " + shotsTaken;
     }
 
-    // Update is called once per frame
     void Update()
     {
         UpdateGUI();
@@ -88,9 +90,19 @@ public class MissionDemolition : MonoBehaviour
         level++;
         if (level == levelMax)
         {
-            level = 0;
-            shotsTaken = 0;
+            gameOverPanel.SetActive(true);
         }
+        else
+        {
+            StartLevel();
+        }
+    }
+
+    void RestartGame()
+    {
+        gameOverPanel.SetActive(false); 
+        level = 0;
+        shotsTaken = 0;
         StartLevel();
     }
 
